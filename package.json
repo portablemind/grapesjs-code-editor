@@ -3,6 +3,7 @@
   "version": "0.1.1",
   "description": "Code editor plugin for GrapesJS",
   "main": "dist/grapesjs-code-editor.min.js",
+  "repository": "github:portablemind/grapesjs-code-editor",
   "author": "Duarte Henriques",
   "license": "BSD-3-Clause",
   "scripts": {
