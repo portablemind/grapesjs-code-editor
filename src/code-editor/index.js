@@ -1,18 +1,21 @@
 import Split from 'split.js'
 
-const $ = document.getElementById.bind(document)
-
 class CodeEditor {
   constructor (editor) {
     this.editor = editor
     this.isShowing = true
-    this.buildCodePanel()
+    this.buildCodePanel(editor)
   }
 
   findPanel () {
     const pn = this.editor.Panels
     const id = 'views-container'
-    return pn.getPanel(id) || pn.addPanel({ id })
+    const panel = pn.getPanel(id) || pn.addPanel({ id })
+    return panel
+  }
+
+  findWithinEditor (arg) {
+    return this.editor.$(arg, this.editor.getEl())
   }
 
   buildCodeEditor (type) {
@@ -32,16 +35,17 @@ class CodeEditor {
 
   buildSection (type, editor, textArea) {
     const section = document.createElement('section')
-    section.innerHTML = `<div class="codepanel-separator">
+    section.innerHTML = `
+      <div class="codepanel-separator">
         <div class="codepanel-label">${type}</div>
-        <button id="cp-save-${type}">Save</button>
+        <button class="cp-save-${type}">Save</button>
       </div>`
     section.appendChild(textArea)
     this.codePanel.appendChild(section)
     return section
   }
 
-  buildCodePanel () {
+  buildCodePanel (editor) {
     const panel = this.findPanel()
     this.codePanel = document.createElement('div')
     this.codePanel.classList.add('code-panel')
@@ -59,8 +63,12 @@ class CodeEditor {
     this.cssCodeEditor.init(cssTextArea)
     this.updateEditorContents()
 
-    $('cp-save-html').addEventListener('click', this.updateHtml.bind(this))
-    $('cp-save-css').addEventListener('click', this.updateCss.bind(this))
+    this.findWithinEditor('.cp-save-html')
+      .get(0)
+      .addEventListener('click', this.updateHtml.bind(this))
+    this.findWithinEditor('.cp-save-css')
+      .get(0)
+      .addEventListener('click', this.updateCss.bind(this))
 
     Split(sections, {
       direction: 'vertical',
@@ -89,14 +97,14 @@ class CodeEditor {
     this.codePanel.style.display = 'block'
     // make sure editor is aware of width change after the 300ms effect ends
     setTimeout(this.refreshEditors.bind(this), 320)
-    this.editor.$('.gjs-pn-views-container').get(0).style.width = '35%'
-    this.editor.$('.gjs-cv-canvas').get(0).style.width = '65%'
+    this.findWithinEditor('.gjs-pn-views-container').get(0).style.width = '35%'
+    this.findWithinEditor('.gjs-cv-canvas').get(0).style.width = '65%'
   }
 
   hideCodePanel () {
     if (this.codePanel) this.codePanel.style.display = 'none'
-    this.editor.$('.gjs-pn-views-container').get(0).style.width = '15%'
-    this.editor.$('.gjs-cv-canvas').get(0).style.width = '85%'
+    this.findWithinEditor('.gjs-pn-views-container').get(0).style.width = '15%'
+    this.findWithinEditor('.gjs-cv-canvas').get(0).style.width = '85%'
     this.isShowing = false
   }
 

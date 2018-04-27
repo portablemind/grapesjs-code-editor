@@ -64,20 +64,18 @@
     </div>
 
     <script type="text/javascript">
-      var editor = grapesjs.init({
-        showOffsets: 1,
-        noticeOnUnload: 0,
-        container: '#gjs',
-        height: '100%',
-        fromElement: true,
-        storageManager: { autoload: 0 },
-        commands: {
-          defaults: [
-            window['grapesjs-code-editor'].codeCommand,
-          ],
-        },
-        panels: window['grapesjs-code-editor'].panels,
-      });
-    </script>
+    var editor = grapesjs.init({
+  showOffsets: 1,
+  noticeOnUnload: 0,
+  container: '#gjs',
+  height: '100%',
+  fromElement: true,
+  storageManager: { autoload: 0 },
+  commands: {
+    defaults: [window['grapesjs-code-editor'].codeCommandFactory()]
+  },
+  panels: window['grapesjs-code-editor'].panels
+})
+</script>
   </body>
 </html>

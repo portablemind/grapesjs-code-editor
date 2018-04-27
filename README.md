@@ -25,7 +25,7 @@ A plugin to allow users to edit html and css code on GrapesJS.
       container: '#gjs',
       commands: {
         defaults: [
-          window['grapesjs-code-editor'].codeCommand,
+          window['grapesjs-code-editor'].codeCommandFactory(),
         ],
       },
       panels: window['grapesjs-code-editor'].panels,
