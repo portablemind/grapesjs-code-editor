@@ -38,7 +38,7 @@ class CodeEditor {
     section.innerHTML = `
       <div class="codepanel-separator">
         <div class="codepanel-label">${type}</div>
-        <button class="cp-save-${type}">Save</button>
+        <button class="cp-apply-${type}">Apply</button>
       </div>`
     section.appendChild(textArea)
     this.codePanel.appendChild(section)
@@ -63,10 +63,10 @@ class CodeEditor {
     this.cssCodeEditor.init(cssTextArea)
     this.updateEditorContents()
 
-    this.findWithinEditor('.cp-save-html')
+    this.findWithinEditor('.cp-apply-html')
       .get(0)
       .addEventListener('click', this.updateHtml.bind(this))
-    this.findWithinEditor('.cp-save-css')
+    this.findWithinEditor('.cp-apply-css')
       .get(0)
       .addEventListener('click', this.updateCss.bind(this))
 
