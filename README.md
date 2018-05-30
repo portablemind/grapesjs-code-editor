@@ -5,9 +5,9 @@ A plugin to allow users to edit html and css code on GrapesJS.
 ## Download
 
 * CDN
-  * `https://unpkg.com/grapesjs-code-editor`
+  * `https://unpkg.com/@truenorthtechnology/grapesjs-code-editor`
 * NPM
-  * `npm i grapesjs-code-editor`
+  * `npm i @truenorthtechnology/grapesjs-code-editor`
 * GIT
   * `git clone https://github.com/portablemind/grapesjs-code-editor.git`
 
