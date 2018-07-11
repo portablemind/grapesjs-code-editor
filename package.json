@@ -1,6 +1,6 @@
 {
   "name": "@truenorthtechnology/grapesjs-code-editor",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "Code editor plugin for GrapesJS",
   "main": "dist/@truenorthtechnology/grapesjs-code-editor.min.js",
   "repository": "github:portablemind/grapesjs-code-editor",
@@ -9,16 +9,22 @@
   "scripts": {
     "lint": "eslint src",
     "v:patch": "$npm_execpath version --no-git-tag-version --patch",
-    "build":
-      "$npm_execpath run v:patch && $npm_execpath run build:css && webpack --env.production",
-    "build:css":
-      "node-sass src/styles.scss dist/css/@truenorthtechnology/grapes-code-editor.min.css --output-style compressed",
+    "build": "$npm_execpath run v:patch && $npm_execpath run build:css && webpack --env.production",
+    "build:css": "node-sass src/styles.scss dist/@truenorthtechnology/css/grapes-code-editor.min.css --output-style compressed",
     "start": "webpack-dev-server --open --progress --colors"
   },
-  "keywords": ["grapesjs", "plugin", "source"],
+  "keywords": [
+    "grapesjs",
+    "plugin",
+    "source"
+  ],
   "babel": {
-    "presets": ["env"],
-    "plugins": ["transform-object-rest-spread"]
+    "presets": [
+      "env"
+    ],
+    "plugins": [
+      "transform-object-rest-spread"
+    ]
   },
   "peerDependencies": {
     "grapesjs": "0.x"
