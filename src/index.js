@@ -1,10 +1,11 @@
 import CodeEditor from './code-editor'
-import panels from './panels'
+
+const openCodeStr = 'open-code'
 
 const codeCommandFactory = () => {
   let codeEditor = null
   return {
-    id: 'open-code',
+    id: openCodeStr,
     run: (editor, senderBtn) => {
       if (!codeEditor) codeEditor = new CodeEditor(editor)
       codeEditor.showCodePanel()
@@ -15,4 +16,4 @@ const codeCommandFactory = () => {
   }
 }
 
-export { codeCommandFactory, panels }
+export { codeCommandFactory }

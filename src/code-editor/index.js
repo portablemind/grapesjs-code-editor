@@ -103,8 +103,8 @@ class CodeEditor {
 
   hideCodePanel () {
     if (this.codePanel) this.codePanel.style.display = 'none'
-    this.findWithinEditor('.gjs-pn-views-container').get(0).style.width = '15%'
-    this.findWithinEditor('.gjs-cv-canvas').get(0).style.width = '85%'
+    this.findWithinEditor('.gjs-pn-views-container').get(0).style.width = '26%'
+    this.findWithinEditor('.gjs-cv-canvas').get(0).style.width = '74%'
     this.isShowing = false
   }
 
@@ -117,7 +117,8 @@ class CodeEditor {
     const htmlCode = this.htmlCodeEditor.editor.getValue()
     if (!htmlCode || htmlCode === this.previousHtmlCode) return
     this.previousHtmlCode = htmlCode
-    this.editor.setComponents(htmlCode)
+    const rootNode = this.editor.LayerManager.getRoot()
+    rootNode.components(htmlCode)
   }
 
   updateCss () {
@@ -129,8 +130,23 @@ class CodeEditor {
 
   updateEditorContents () {
     if (!this.isShowing) return
-    this.htmlCodeEditor.setContent(this.editor.getHtml())
+    this.htmlCodeEditor.setContent(this.getGrapesHtml())
     this.cssCodeEditor.setContent(this.editor.getCss({ avoidProtected: true }))
+  }
+
+  getGrapesHtml () {
+    const config = this.editor.getConfig()
+    const exportWrapper = config.exportWrapper
+    const wrappesIsBody = config.wrappesIsBody
+    const rootNode = this.editor.LayerManager.getRoot() // get from root, not wrapper.
+    let result = this.editor.CodeManager.getCode(rootNode, 'html', {
+      exportWrapper,
+      wrappesIsBody
+    })
+    const js = config.jsInHtml ? this.editor.getJs() : ''
+    result += js ? `<script>${js}</script>` : ''
+
+    return result
   }
 }
 

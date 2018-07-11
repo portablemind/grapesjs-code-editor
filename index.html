@@ -72,9 +72,25 @@
   fromElement: true,
   storageManager: { autoload: 0 },
   commands: {
-    defaults: [window['grapesjs-code-editor'].codeCommandFactory()]
+    defaults: [
+      window['@truenorthtechnology/grapesjs-code-editor'].codeCommandFactory()
+    ]
   },
-  panels: window['grapesjs-code-editor'].panels
+  panels: {
+    defaults: [
+      {
+        buttons: [
+          {
+            attributes: { title: 'Open Code' },
+            className: 'fa fa-code',
+            command: opc,
+            id: opc
+          }
+        ],
+        id: 'views'
+      }
+    ]
+  }
 })
 </script>
   </body>
