@@ -2,10 +2,12 @@
   text-align: left;
   font-size: 1rem;
   height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .code-panel section {
-  height: 50%;
+  flex: 1;
 }
 
 .code-panel section .codepanel-separator {

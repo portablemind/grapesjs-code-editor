@@ -1,8 +1,10 @@
 import Split from 'split.js'
+import juice from 'juice'
 
 class CodeEditor {
-  constructor (editor) {
+  constructor (editor, opts) {
     this.editor = editor
+    this.opts = opts || { inlineCss: false }
     this.isShowing = true
     this.buildCodePanel(editor)
   }
@@ -50,33 +52,41 @@ class CodeEditor {
     this.codePanel = document.createElement('div')
     this.codePanel.classList.add('code-panel')
 
+    let sections = []
+    let cssTextArea = null
+
     this.htmlCodeEditor = this.buildCodeEditor('html')
-    this.cssCodeEditor = this.buildCodeEditor('css')
     const htmlTextArea = document.createElement('textarea')
-    const cssTextArea = document.createElement('textarea')
-    const sections = [
-      this.buildSection('html', this.htmlCodeEditor, htmlTextArea),
-      this.buildSection('css', this.cssCodeEditor, cssTextArea)
-    ]
+    sections.push(this.buildSection('html', this.htmlCodeEditor, htmlTextArea))
+
+    if (!this.opts.inlineCss) {
+      this.cssCodeEditor = this.buildCodeEditor('css')
+      cssTextArea = document.createElement('textarea')
+      sections.push(this.buildSection('css', this.cssCodeEditor, cssTextArea))
+    }
+
     panel.set('appendContent', this.codePanel).trigger('change:appendContent')
     this.htmlCodeEditor.init(htmlTextArea)
-    this.cssCodeEditor.init(cssTextArea)
+    if (!this.opts.inlineCss) this.cssCodeEditor.init(cssTextArea)
     this.updateEditorContents()
 
     this.findWithinEditor('.cp-apply-html')
       .get(0)
       .addEventListener('click', this.updateHtml.bind(this))
-    this.findWithinEditor('.cp-apply-css')
-      .get(0)
-      .addEventListener('click', this.updateCss.bind(this))
 
-    Split(sections, {
-      direction: 'vertical',
-      sizes: [50, 50],
-      minSize: 100,
-      gutterSize: 2,
-      onDragEnd: this.refreshEditors.bind(this)
-    })
+    if (!this.opts.inlineCss) {
+      this.findWithinEditor('.cp-apply-css')
+        .get(0)
+        .addEventListener('click', this.updateCss.bind(this))
+
+      Split(sections, {
+        direction: 'vertical',
+        sizes: [50, 50],
+        minSize: 100,
+        gutterSize: 2,
+        onDragEnd: this.refreshEditors.bind(this)
+      })
+    }
 
     this.editor.on('component:add', model => {
       this.updateEditorContents()
@@ -94,7 +104,7 @@ class CodeEditor {
   showCodePanel () {
     this.isShowing = true
     this.updateEditorContents()
-    this.codePanel.style.display = 'block'
+    this.codePanel.style.display = 'flex'
     // make sure editor is aware of width change after the 300ms effect ends
     setTimeout(this.refreshEditors.bind(this), 320)
     this.findWithinEditor('.gjs-pn-views-container').get(0).style.width = '35%'
@@ -110,7 +120,9 @@ class CodeEditor {
 
   refreshEditors () {
     this.htmlCodeEditor.editor.refresh()
-    this.cssCodeEditor.editor.refresh()
+    if (!this.opts.inlineCss) {
+      this.cssCodeEditor.editor.refresh()
+    }
   }
 
   updateHtml () {
@@ -131,18 +143,31 @@ class CodeEditor {
   updateEditorContents () {
     if (!this.isShowing) return
     this.htmlCodeEditor.setContent(this.getGrapesHtml())
-    this.cssCodeEditor.setContent(this.editor.getCss({ avoidProtected: true }))
+
+    if (!this.opts.inlineCss) {
+      this.cssCodeEditor.setContent(this.editor.getCss({ avoidProtected: true }))
+    }
   }
 
   getGrapesHtml () {
+    let result = ''
     const config = this.editor.getConfig()
-    const exportWrapper = config.exportWrapper
-    const wrappesIsBody = config.wrappesIsBody
-    const rootNode = this.editor.LayerManager.getRoot() // get from root, not wrapper.
-    let result = this.editor.CodeManager.getCode(rootNode, 'html', {
-      exportWrapper,
-      wrappesIsBody
-    })
+    const html = this.editor.getHtml()
+    // const exportWrapper = config.exportWrapper
+    // const wrappesIsBody = config.wrappesIsBody
+    // const rootNode = this.editor.LayerManager.getRoot() // get from root, not wrapper.
+    // const html = this.editor.CodeManager.getCode(rootNode, 'html', {
+    //   exportWrapper,
+    //   wrappesIsBody
+    // })
+
+    if (this.opts.inlineCss) {
+      const htmlInlineCss = juice(`${html}<style>${this.editor.getCss()}</style>`)
+      result += htmlInlineCss
+    } else {
+      result += html
+    }
+
     const js = config.jsInHtml ? this.editor.getJs() : ''
     result += js ? `<script>${js}</script>` : ''
 
