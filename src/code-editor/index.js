@@ -105,7 +105,7 @@ class CodeEditor {
 
   hideCodePanel() {
     if (this.codePanel) this.codePanel.style.display = 'none';
-    this.findWithinEditor('.gjs-pn-views-container').get(0).style.width = '15%';
+    this.findWithinEditor('.gjs-pn-views-container').get(0).style = '';
     this.findWithinEditor('.gjs-cv-canvas').get(0).style.display = 'flex';
     this.isShowing = false;
   }
