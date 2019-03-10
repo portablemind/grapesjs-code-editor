@@ -44,7 +44,7 @@
     "node-sass": "^4.8.3",
     "prettier-eslint": "^8.8.1",
     "webpack": "^3.8.1",
-    "webpack-dev-server": "^2.9.4"
+    "webpack-dev-server": "3.1.11"
   },
   "dependencies": {
     "juice": "^4.3.2",
