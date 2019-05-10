@@ -1,6 +1,6 @@
 {
   "name": "@truenorthtechnology/grapesjs-code-editor",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "description": "Code editor plugin for GrapesJS",
   "main": "dist/@truenorthtechnology/grapesjs-code-editor.min.js",
   "repository": "github:portablemind/grapesjs-code-editor",

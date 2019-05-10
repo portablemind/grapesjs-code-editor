@@ -31,7 +31,7 @@ class CodeEditor {
       autoCloseTags: true,
       autoCloseBrackets: true,
       styleActiveLine: true,
-      smartIndent: true
+      smartIndent: true,
     });
     return codeEditor;
   }
@@ -85,7 +85,7 @@ class CodeEditor {
         sizes: [50, 50],
         minSize: 100,
         gutterSize: 2,
-        onDragEnd: this.refreshEditors.bind(this)
+        onDragEnd: this.refreshEditors.bind(this),
       });
     }
 
@@ -152,21 +152,23 @@ class CodeEditor {
   getGrapesHtml() {
     let result = '';
     const config = this.editor.getConfig();
-    const html = this.editor.getHtml();
-    // const exportWrapper = config.exportWrapper
-    // const wrappesIsBody = config.wrappesIsBody
-    // const rootNode = this.editor.LayerManager.getRoot() // get from root, not wrapper.
-    // const html = this.editor.CodeManager.getCode(rootNode, 'html', {
-    //   exportWrapper,
-    //   wrappesIsBody
-    // })
 
     if (this.opts.inlineCss) {
+      const html = this.editor.getHtml();
+
       const htmlInlineCss = juice(
         `${html}<style>${this.editor.getCss()}</style>`
       );
       result += htmlInlineCss;
     } else {
+      const exportWrapper = config.exportWrapper;
+      const wrappesIsBody = config.wrappesIsBody;
+      const rootNode = this.editor.LayerManager.getRoot(); // get from root, not wrapper.
+      const html = this.editor.CodeManager.getCode(rootNode, 'html', {
+        exportWrapper,
+        wrappesIsBody,
+      });
+
       result += html;
     }
 
